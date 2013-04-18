@@ -1,0 +1,24 @@
+﻿<div class="create">
+    <h4>Create new game</h4>
+    <hr />
+
+    <div class="row">
+        <div class="large-6 small-12 columns">
+            <label>Game Name</label>
+            <input type="text" data-bind="value: name" />
+        </div>
+        <div class="large-6 small-12 columns">
+            <label>Scenario</label>
+            <select data-bind="options: scenarios, optionsText: 'name', optionsValue: 'name', value: selectedScenario" ></select>
+        </div>
+    </div>
+
+    <hr />
+
+    <div class="row">
+        <div class="columns text-center small-centered">
+            <button class="small round button" data-bind="click: create">Create</button>
+            <a href="#/" class="small round button secondary">Cancel</a>
+        </div>
+    </div>
+</div>

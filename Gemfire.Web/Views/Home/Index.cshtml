@@ -1,0 +1,50 @@
+﻿@model Gemfire.ViewModels.Home.Index
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+
+        <title>Gemfire</title>
+
+        <link href="~/CSS/normalize.css" rel="stylesheet" />
+        <link href="~/CSS/foundation.css" rel="stylesheet" />
+        <link href="~/CSS/defaults.css" rel="stylesheet" />
+        <link href="~/CSS/site.css" rel="stylesheet" />
+    </head>
+    <body>
+        <div>
+            @if ( !this.Model.IsAuthenticated )
+            {
+                <div id="janrainEngageEmbed"></div>
+            }
+            else
+            {
+                <div id="applicationHost"></div>  
+            }
+        </div>
+
+        @if ( !this.Model.IsAuthenticated )
+        {
+            <script src="~/Scripts/janrain.js"></script>
+        }
+        else
+        {
+            <script src="~/Scripts/jquery-1.9.1.js"></script>
+            <script src="~/Scripts/jquery.signalR-1.0.1.js"></script>
+            <script src="~/Scripts/foundation.min.js"></script>
+            <script src="~/Scripts/knockout-2.2.1.debug.js"></script>
+            <script src="~/Scripts/sammy-0.7.4.js"></script>
+            <script src="~/Scripts/jquery.cookie.js"></script>
+            <script src="~/Scripts/underscore.js"></script>
+            <script src="~/signalr/hubs"></script>
+            
+            <script src="~/app/durandal/amd/require.js" data-main="app/main"></script>
+        }
+    </body>
+</html>

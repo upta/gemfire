@@ -1,0 +1,14 @@
+﻿<div class="shell">
+    <header>
+        <img class="avatar" data-bind="attr: { src: user.photo || 'images/blank_avatar.png' }" />
+        <span data-bind="text: user.displayName"></span>
+        <a href="" data-bind="click: logout">logout</a>
+    </header>
+    <div class="page-host">
+        <!--ko compose: { 
+            model: router.activeItem, //wiring the router
+            afterCompose: router.afterCompose, //wiring the router
+            transition: 'entrance'
+        }--><!--/ko-->
+    </div>
+</div>

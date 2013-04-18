@@ -1,0 +1,14 @@
+﻿.shell > header {
+  padding: 6px;
+  background-color: lightgray;
+}
+.shell .avatar {
+  max-height: 40px;
+  margin-left: 12px;
+}
+.lobby {
+  padding: 12px;
+}
+.create {
+  padding: 12px;
+}

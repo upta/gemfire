@@ -1,0 +1,39 @@
+﻿<div class="lobby">
+    <header class="row">
+        <div class="small-9 columns">
+            <dl class="sub-nav">
+                <dd class="active"><a href="">All</a></dd>
+                <dd><a href="">My games</a></dd>
+            </dl>
+        </div>
+
+        <div class="small-3 columns">
+            <a href="#/create" class="small round button right">Create</a>
+        </div>
+    </header>
+
+    <hr />
+
+    <ul data-bind="template: { foreach: filteredGames }">
+        <li>
+            <h5><span data-bind="text: name"></span> – <span data-bind="text: scenario"></span></h5>
+            <em>players–</em>
+            <ul data-bind="template: { foreach: userList }">
+                <li data-bind="text: name"></li>
+            </ul>
+            <!-- ko if: $parent.canJoinGame($data) -->
+            <button class="small round button right" data-bind="click: $parent.joinGame">Join</button>
+            <!-- /ko -->
+
+            <!-- ko if: $parent.canLeaveGame($data) -->
+            <button class="small round button right" data-bind="click: $parent.leaveGame">Leave</button>
+            <!-- /ko -->
+
+            <!-- ko if: $parent.createdGame($data) -->
+            <button class="small round alert button right" data-bind="click: $parent.leaveGame">Delete</button>
+            <button class="small round button right">Start</button>
+            <!-- /ko -->
+            <hr />
+        </li>
+    </ul>
+</div>
