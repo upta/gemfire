@@ -46,5 +46,10 @@ namespace Gemfire.Web.Controllers
 
             return View( vm );
         }
+
+        public ActionResult Tests()
+        {
+            return View();
+        }
     }
 }

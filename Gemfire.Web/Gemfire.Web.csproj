@@ -151,6 +151,7 @@
     <Compile Include="App_Start\IocConfig.cs" />
     <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -184,6 +185,56 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Content Include="App\tests\helper.js">
+      <DependentUpon>helper.ts</DependentUpon>
+    </Content>
+    <Content Include="App\tests\helper.min.js">
+      <DependentUpon>helper.ts</DependentUpon>
+    </Content>
+    <Content Include="App\tests\helper.ts" />
+    <Content Include="App\tests\hubs\_lobby.js">
+      <DependentUpon>_lobby.ts</DependentUpon>
+    </Content>
+    <Content Include="App\tests\hubs\_lobby.min.js">
+      <DependentUpon>_lobby.ts</DependentUpon>
+    </Content>
+    <Content Include="App\test-main.js">
+      <DependentUpon>test-main.ts</DependentUpon>
+    </Content>
+    <Content Include="App\test-main.min.js">
+      <DependentUpon>test-main.ts</DependentUpon>
+    </Content>
+    <Content Include="Scripts\sinon-1.6.0.js" />
+    <Content Include="Scripts\typings\sinon\sinon-1.5.d.ts" />
+    <Content Include="Scripts\typings\_references.test.d.ts" />
+    <Content Include="Scripts\typings\qunit\qunit.d.ts" />
+    <Content Include="App\tests\hubs\lobby.js">
+      <DependentUpon>_lobby.ts</DependentUpon>
+    </Content>
+    <Content Include="App\tests\hubs\lobby.min.js">
+      <DependentUpon>_lobby.ts</DependentUpon>
+    </Content>
+    <Content Include="App\tests\hubs\_lobby.ts" />
+    <Content Include="Views\Test\Index.cshtml" />
+    <Content Include="Web.config" />
+    <Content Include="App\tests\hubs\lobby.js.map">
+      <DependentUpon>_lobby.ts</DependentUpon>
+    </Content>
+    <Content Include="App\tests\hubs\_lobby.js.map">
+      <DependentUpon>_lobby.ts</DependentUpon>
+    </Content>
+    <Content Include="App\test-main.js.map">
+      <DependentUpon>test-main.ts</DependentUpon>
+    </Content>
+    <Content Include="App\tests\helper.js.map">
+      <DependentUpon>helper.ts</DependentUpon>
+    </Content>
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.base.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.base.config</DependentUpon>
+    </None>
     <TypeScriptCompile Include="App\config.ts" />
     <Content Include="App\auth.js">
       <DependentUpon>auth.ts</DependentUpon>
@@ -372,13 +423,8 @@
     <Content Include="Scripts\typings\underscore\underscore.d.ts" />
     <Content Include="Scripts\underscore.js" />
     <Content Include="Scripts\underscore.min.js" />
-    <Content Include="Web.config" />
-    <Content Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
-    <Content Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
+    <Content Include="App\test-main.ts" />
+    <Content Include="Web.base.config" />
     <Content Include="Views\Web.config" />
     <Content Include="Scripts\jquery-1.9.1.min.map" />
   </ItemGroup>
@@ -414,7 +460,7 @@
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:53785/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
-          <UseCustomServer>True</UseCustomServer>
+          <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>http://gemfire</CustomServerUrl>
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
@@ -422,6 +468,10 @@
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <UsingTask TaskName="TransformXml" AssemblyFile="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v11.0\Web\Microsoft.Web.Publishing.Tasks.dll" />
+  <Target Name="AfterBuild">
+    <TransformXml Source="Web.base.Config" Transform="Web.$(Configuration).config" Destination="Web.config" StackTrace="true" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
