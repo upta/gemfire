@@ -7,6 +7,7 @@ namespace Gemfire
 {
     public interface IGameHandler
     {
+        void AddGame( Game game );
         void AddPlayer( Game game, string userId );
         Game CreateGameFromScenario( User creator, string scenario, string name );
         Game GetGameById( string id );

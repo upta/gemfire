@@ -47,6 +47,42 @@ namespace Gemfire.Tests.Server.Hub
         }
 
         [TestMethod]
+        public void CreateGame_AddsGameAfterCreate()
+        {
+            var connectionId = "123";
+            var gameName = "game-name";
+            var scenario = "scenario";
+            var user = new User( connectionId, new RegisteredClient() );
+            var game = new Game( gameName, user.Id );
+            var calledAdd = false;
+
+            #region UserHandler
+            var userHandler = new Mock<IUserHandler>();
+
+            userHandler.Setup( a => a.GetUser( connectionId ) )
+                       .Returns( user );
+            #endregion
+
+            #region GameHandler
+            var gameHandler = new Mock<IGameHandler>();
+
+            gameHandler.Setup( a => a.CreateGameFromScenario( It.IsAny<User>(), It.IsAny<string>(), It.IsAny<string>() ) )
+                       .Returns( game );
+
+            gameHandler.Setup( a => a.AddGame( It.IsAny<Game>() ) )
+                       .Callback( () => calledAdd = true );
+            #endregion
+
+            var hub = this.GetHub( connectionId,
+                                   userHandler: userHandler,
+                                   gameHandler: gameHandler );
+
+            hub.CreateGame( gameName, scenario );
+
+            Assert.IsTrue( calledAdd );
+        }
+
+        [TestMethod]
         public void CreateGame_AddsUserToGameGroup()
         {
             var connectionId = "123";

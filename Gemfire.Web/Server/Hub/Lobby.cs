@@ -41,6 +41,7 @@ namespace Gemfire
                 throw new InvalidOperationException( string.Format( "Failed to create game from scenario {0}, named {1}", scenario, name ) );
             }
 
+            this.gameHandler.AddGame( game );
             this.Groups.Add( this.Context.ConnectionId, game.GroupName );
 
             var dto = this.mappingHandler.Map<GameDto>( game );

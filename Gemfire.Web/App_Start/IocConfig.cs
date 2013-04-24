@@ -18,7 +18,15 @@ namespace Gemfire
         {
             var kernel = new StandardKernel();
 
-            kernel.Bind<IRepository>().ToConstant( new MongoRepository( ConfigurationManager.ConnectionStrings[ "Mongo" ].ConnectionString, "gemfire" ) );
+            try
+            {
+                throw new Exception();
+                kernel.Bind<IRepository>().ToConstant( new MongoRepository( ConfigurationManager.ConnectionStrings[ "Mongo" ].ConnectionString, "gemfire" ) );
+            }
+            catch ( Exception ex ) // probably a bad connection string for the mongodb, just use an in-memory store to get running instead
+            {
+                kernel.Bind<IRepository>().ToConstant( new MemoryRepository() );
+            }
 
             var repo = kernel.Get<IRepository>();
 
