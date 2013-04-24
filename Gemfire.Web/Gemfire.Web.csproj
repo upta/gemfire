@@ -470,7 +470,7 @@
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <UsingTask TaskName="TransformXml" AssemblyFile="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v11.0\Web\Microsoft.Web.Publishing.Tasks.dll" />
   <Target Name="AfterBuild" Condition="Exists('Web.$(Configuration).config')">
-    <TransformXml Source="Web.base.Config" Transform="Web.$(Configuration).config" Destination="Web.config" StackTrace="true" />
+    <TransformXml Source="Web.base.Config" Transform="Web.$(Configuration).config" Destination="Web.config" StackTrace="true" Condition="Exists('Web.$(Configuration).config')" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
