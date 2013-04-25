@@ -10,5 +10,8 @@ requirejs.config(
 
 require( 
 [
-    "tests/hubs/_lobby"
+    "tests/_auth",
+    "tests/hubs/_lobby",
+    "tests/viewmodels/_createGame",
+    "tests/viewmodels/_shell"
 ] );

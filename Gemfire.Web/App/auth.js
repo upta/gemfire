@@ -1,10 +1,12 @@
-define(["require", "exports", "hubs/lobby"], function(require, exports, __hub__) {
+define(["require", "exports", "hubs/lobby", "global"], function(require, exports, __hub__, __global__) {
     var RegisteredClient = (function () {
         function RegisteredClient() { }
         return RegisteredClient;
     })();
     exports.RegisteredClient = RegisteredClient;    
     var hub = __hub__;
+
+    var global = __global__;
 
     function init() {
         return $.Deferred(function (dfd) {
@@ -31,7 +33,7 @@ define(["require", "exports", "hubs/lobby"], function(require, exports, __hub__)
     exports.init = init;
     function logout() {
         $.removeCookie("gemfire.state");
-        location.reload(true);
+        global.reload();
     }
     exports.logout = logout;
     exports.user;

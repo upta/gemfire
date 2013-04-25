@@ -9,7 +9,8 @@ export class RegisteredClient
     userId: string;
 }
 
-import hub = module("hubs/lobby");
+import hub = module( "hubs/lobby" );
+import global = module( "global" );
 
 export function init()
 {
@@ -48,7 +49,7 @@ export function init()
 export function logout()
 {
     $.removeCookie( "gemfire.state" );
-    location.reload( true );
+    global.reload();
 }
 
 export var user: RegisteredClient;

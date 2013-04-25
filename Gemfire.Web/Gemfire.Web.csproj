@@ -186,6 +186,13 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Content Include="App\global.js">
+      <DependentUpon>global.ts</DependentUpon>
+    </Content>
+    <Content Include="App\global.min.js">
+      <DependentUpon>global.ts</DependentUpon>
+    </Content>
+    <Content Include="App\global.ts" />
     <Content Include="App\tests\helper.js">
       <DependentUpon>helper.ts</DependentUpon>
     </Content>
@@ -205,6 +212,34 @@
     <Content Include="App\test-main.min.js">
       <DependentUpon>test-main.ts</DependentUpon>
     </Content>
+    <Content Include="App\tests\viewmodels\_createGame.js">
+      <DependentUpon>_createGame.ts</DependentUpon>
+    </Content>
+    <Content Include="App\tests\viewmodels\_createGame.min.js">
+      <DependentUpon>_createGame.ts</DependentUpon>
+    </Content>
+    <Content Include="App\tests\viewmodels\_createGame.ts" />
+    <Content Include="App\tests\_auth.js">
+      <DependentUpon>_auth.ts</DependentUpon>
+    </Content>
+    <Content Include="App\tests\_auth.min.js">
+      <DependentUpon>_auth.ts</DependentUpon>
+    </Content>
+    <Content Include="App\tests\_auth.ts" />
+    <Content Include="App\tests\viewmodels\_shell.js">
+      <DependentUpon>_shell.ts</DependentUpon>
+    </Content>
+    <Content Include="App\tests\viewmodels\_shell.min.js">
+      <DependentUpon>_shell.ts</DependentUpon>
+    </Content>
+    <Content Include="App\tests\viewmodels\_shell.ts" />
+    <Content Include="App\viewmodels\createGame.js">
+      <DependentUpon>createGame.ts</DependentUpon>
+    </Content>
+    <Content Include="App\viewmodels\createGame.min.js">
+      <DependentUpon>createGame.ts</DependentUpon>
+    </Content>
+    <Content Include="App\viewmodels\createGame.ts" />
     <Content Include="Scripts\sinon-1.6.0.js" />
     <Content Include="Scripts\typings\sinon\sinon-1.5.d.ts" />
     <Content Include="Scripts\typings\_references.test.d.ts" />
@@ -228,6 +263,21 @@
     </Content>
     <Content Include="App\tests\helper.js.map">
       <DependentUpon>helper.ts</DependentUpon>
+    </Content>
+    <Content Include="App\tests\_auth.js.map">
+      <DependentUpon>_auth.ts</DependentUpon>
+    </Content>
+    <Content Include="App\global.js.map">
+      <DependentUpon>global.ts</DependentUpon>
+    </Content>
+    <Content Include="App\tests\viewmodels\_shell.js.map">
+      <DependentUpon>_shell.ts</DependentUpon>
+    </Content>
+    <Content Include="App\viewmodels\createGame.js.map">
+      <DependentUpon>createGame.ts</DependentUpon>
+    </Content>
+    <Content Include="App\tests\viewmodels\_createGame.js.map">
+      <DependentUpon>_createGame.ts</DependentUpon>
     </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.base.config</DependentUpon>
@@ -286,13 +336,6 @@
     </Content>
     <TypeScriptCompile Include="App\viewmodels\shell.ts" />
     <TypeScriptCompile Include="App\viewmodels\lobby.ts" />
-    <Content Include="App\viewmodels\create.js">
-      <DependentUpon>create.ts</DependentUpon>
-    </Content>
-    <Content Include="App\viewmodels\create.min.js">
-      <DependentUpon>create.ts</DependentUpon>
-    </Content>
-    <Content Include="App\viewmodels\create.ts" />
     <Content Include="App\viewmodels\lobby.js">
       <DependentUpon>lobby.ts</DependentUpon>
     </Content>
@@ -335,9 +378,6 @@
     </Content>
     <Content Include="App\auth.js.map">
       <DependentUpon>auth.ts</DependentUpon>
-    </Content>
-    <Content Include="App\viewmodels\create.js.map">
-      <DependentUpon>create.ts</DependentUpon>
     </Content>
     <Content Include="CSS\create.less" />
     <Content Include="App\hubs\lobby.js.map">
@@ -457,7 +497,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>59181</DevelopmentServerPort>
+          <DevelopmentServerPort>57067</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:53785/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
