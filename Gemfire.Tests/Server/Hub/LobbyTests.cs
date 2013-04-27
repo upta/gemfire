@@ -54,7 +54,6 @@ namespace Gemfire.Tests.Server.Hub
             var scenario = "scenario";
             var user = new User( connectionId, new RegisteredClient() );
             var game = new Game( gameName, user.Id );
-            var calledAdd = false;
 
             #region UserHandler
             var userHandler = new Mock<IUserHandler>();
@@ -68,9 +67,6 @@ namespace Gemfire.Tests.Server.Hub
 
             gameHandler.Setup( a => a.CreateGameFromScenario( It.IsAny<User>(), It.IsAny<string>(), It.IsAny<string>() ) )
                        .Returns( game );
-
-            gameHandler.Setup( a => a.AddGame( It.IsAny<Game>() ) )
-                       .Callback( () => calledAdd = true );
             #endregion
 
             var hub = this.GetHub( connectionId,
@@ -79,7 +75,7 @@ namespace Gemfire.Tests.Server.Hub
 
             hub.CreateGame( gameName, scenario );
 
-            Assert.IsTrue( calledAdd );
+            gameHandler.Verify( a => a.AddGame( It.IsAny<Game>() ) );
         }
 
         [TestMethod]
@@ -177,32 +173,27 @@ namespace Gemfire.Tests.Server.Hub
         [TestMethod]
         public void InitializeClient_RemovesRegistration()
         {
-            var calledRemove = false;
-
             #region RegistrationHandler
-            var registration = new Mock<IRegistrationHandler>();
+            var registrationHandler = new Mock<IRegistrationHandler>();
 
-            registration.Setup( a => a.RegistrationExists( It.IsAny<string>() ) )
+            registrationHandler.Setup( a => a.RegistrationExists( It.IsAny<string>() ) )
                         .Returns( true );
-
-            registration.Setup( a => a.RemoveRegistration( It.IsAny<string>() ) )
-                        .Callback( () => calledRemove = true );
             #endregion
 
             #region UserHandler
-            var user = new Mock<IUserHandler>();
+            var userHandler = new Mock<IUserHandler>();
 
-            user.Setup( a => a.UserExists( It.IsAny<string>() ) )
+            userHandler.Setup( a => a.UserExists( It.IsAny<string>() ) )
                 .Returns( true );
             #endregion
 
-            var hub = this.GetHub( "conn", 
-                                   registrationHandler: registration, 
-                                   userHandler: user );
+            var hub = this.GetHub( "conn",
+                                   registrationHandler: registrationHandler,
+                                   userHandler: userHandler );
 
             hub.InitializeClient( "reg" );
 
-            Assert.IsTrue( calledRemove );
+            registrationHandler.Verify( a => a.RemoveRegistration( It.IsAny<string>() ) );
         }
 
         [TestMethod]
@@ -234,7 +225,6 @@ namespace Gemfire.Tests.Server.Hub
         [TestMethod]
         public void InitializeClient_ReassignsConnectionIfUserFound()
         {
-            var calledReassign = false;
             var connection = "123";
             var rc = new RegisteredClient
             {
@@ -245,41 +235,37 @@ namespace Gemfire.Tests.Server.Hub
             };
 
             #region RegistrationHandler
-            var registration = new Mock<IRegistrationHandler>();
+            var registrationHandler = new Mock<IRegistrationHandler>();
 
-            registration.Setup( a => a.RegistrationExists( It.IsAny<string>() ) )
-                        .Returns( true );
+            registrationHandler.Setup( a => a.RegistrationExists( It.IsAny<string>() ) )
+                               .Returns( true );
 
-            registration.Setup( a => a.RemoveRegistration( It.IsAny<string>() ) )
-                        .Returns( rc );
+            registrationHandler.Setup( a => a.RemoveRegistration( It.IsAny<string>() ) )
+                               .Returns( rc );
             #endregion
 
             #region UserHandler
-            var user = new Mock<IUserHandler>();
+            var userHandler = new Mock<IUserHandler>();
 
-            user.Setup( a => a.UserExists( It.IsAny<string>() ) )
-                .Returns( false );
+            userHandler.Setup( a => a.UserExists( It.IsAny<string>() ) )
+                       .Returns( false );
 
-            user.Setup( a => a.FindUserByIdentity( rc.Identity ) )
-                .Returns( new User( connection, rc ) );
-
-            user.Setup( a => a.ReassignUser( It.IsAny<string>(), It.IsAny<User>() ) )
-                .Callback( () => calledReassign = true );
+            userHandler.Setup( a => a.FindUserByIdentity( rc.Identity ) )
+                       .Returns( new User( connection, rc ) );
             #endregion
 
             var hub = this.GetHub( connection, 
-                                   registrationHandler: registration, 
-                                   userHandler: user );
+                                   registrationHandler: registrationHandler, 
+                                   userHandler: userHandler );
 
             var result = hub.InitializeClient( "reg" );
 
-            Assert.IsTrue( calledReassign );
+            userHandler.Verify( a => a.ReassignUser( It.IsAny<string>(), It.IsAny<User>() ) );
         }
 
         [TestMethod]
         public void InitializeClient_SavesUser()
         {
-            var calledAdd = false;
             var connection = "123";
             var rc = new RegisteredClient
             {
@@ -290,32 +276,29 @@ namespace Gemfire.Tests.Server.Hub
             };
 
             #region RegistrationHandler
-            var registration = new Mock<IRegistrationHandler>();
+            var registrationHandler = new Mock<IRegistrationHandler>();
 
-            registration.Setup( a => a.RegistrationExists( It.IsAny<string>() ) )
-                        .Returns( true );
+            registrationHandler.Setup( a => a.RegistrationExists( It.IsAny<string>() ) )
+                               .Returns( true );
 
-            registration.Setup( a => a.RemoveRegistration( It.IsAny<string>() ) )
-                        .Returns( rc );
+            registrationHandler.Setup( a => a.RemoveRegistration( It.IsAny<string>() ) )
+                               .Returns( rc );
             #endregion
 
             #region UserHandler
-            var user = new Mock<IUserHandler>();
+            var userHandler = new Mock<IUserHandler>();
 
-            user.Setup( a => a.UserExists( It.IsAny<string>() ) )
-                .Returns( false );
-
-            user.Setup( a => a.AddUser( It.IsAny<User>() ) )
-                .Callback( () => calledAdd = true );
+            userHandler.Setup( a => a.UserExists( It.IsAny<string>() ) )
+                       .Returns( false );
             #endregion
 
             var hub = this.GetHub( connection, 
-                                   registrationHandler: registration,
-                                   userHandler: user );
+                                   registrationHandler: registrationHandler,
+                                   userHandler: userHandler );
 
             var result = hub.InitializeClient( "reg" );
 
-            Assert.IsTrue( calledAdd );
+            userHandler.Verify( a => a.AddUser( It.IsAny<User>() ) );
         }
 
         [TestMethod]
@@ -443,7 +426,6 @@ namespace Gemfire.Tests.Server.Hub
         public void JoinGame_AddsPlayerToGame()
         {
             var connectionId = "123";
-            var calledAdd = false;
 
             #region UserHandler
             var userHandler = new Mock<IUserHandler>();
@@ -457,9 +439,6 @@ namespace Gemfire.Tests.Server.Hub
 
             gameHandler.Setup( a => a.GetGameById( It.IsAny<string>() ) )
                        .Returns( new Game( "game-name", "creator" ) );
-
-            gameHandler.Setup( a => a.AddPlayer( It.IsAny<Game>(), It.IsAny<string>() ) )
-                       .Callback( () => calledAdd = true );
             #endregion
 
             #region GroupManager
@@ -476,14 +455,13 @@ namespace Gemfire.Tests.Server.Hub
 
             hub.JoinGame( "game-id" );
 
-            Assert.IsTrue( calledAdd );
+            gameHandler.Verify( a => a.AddPlayer( It.IsAny<Game>(), It.IsAny<string>() ) );
         }
 
         [TestMethod]
         public void JoinGame_AddsPlayerToGameGroup()
         {
             var connectionId = "123";
-            var calledAdd = false;
             var game = new Game( "game-name", "creator" ) { Id = "game-id" };
 
             #region UserHandler
@@ -504,7 +482,6 @@ namespace Gemfire.Tests.Server.Hub
             var groupManager = new Mock<IGroupManager>();
 
             groupManager.Setup( a => a.Add( It.IsAny<string>(), game.GroupName ) )
-                        .Callback( () => calledAdd = true )
                         .Returns( Task.FromResult<object>( null ) );
             #endregion
 
@@ -515,7 +492,7 @@ namespace Gemfire.Tests.Server.Hub
 
             hub.JoinGame( game.Id );
 
-            Assert.IsTrue( calledAdd );
+            groupManager.Verify( a => a.Add( It.IsAny<string>(), game.GroupName ) );
         }
 
         [TestMethod]
@@ -525,7 +502,6 @@ namespace Gemfire.Tests.Server.Hub
 
             var connectionId = "123";
             var game = new Game( "game-name", "creator" ) { Id = "game-id" };
-            var calledJoinedGame = false;
 
             #region UserHandler
             var userHandler = new Mock<IUserHandler>();
@@ -593,7 +569,6 @@ namespace Gemfire.Tests.Server.Hub
         [TestMethod]
         public void LeaveGame_RemovesGameIfIsCreator()
         {
-            var calledRemove = false;
             var connectionId = "123";
             var user = new User( connectionId, new RegisteredClient() ) { Id = "user-id" };
             var game = new Game( "game-name", user.Id );
@@ -610,9 +585,6 @@ namespace Gemfire.Tests.Server.Hub
 
             gameHandler.Setup( a => a.GetGameById( It.IsAny<string>() ) )
                        .Returns( game );
-
-            gameHandler.Setup( a => a.RemoveGame( It.IsAny<string>() ) )
-                       .Callback( () => calledRemove = true );
             #endregion
 
             var hub = this.GetHub( connectionId,
@@ -621,7 +593,7 @@ namespace Gemfire.Tests.Server.Hub
 
             hub.LeaveGame( game.Id );
 
-            Assert.IsTrue( calledRemove );
+            gameHandler.Verify( a => a.RemoveGame( It.IsAny<string>() ) );
         }
 
         [TestMethod]
@@ -693,7 +665,6 @@ namespace Gemfire.Tests.Server.Hub
         [TestMethod]
         public void LeaveGame_RemovesFromGroupIfIsntCreator()
         {
-            var calledRemove = false;
             var connectionId = "123";
             var user = new User( connectionId, new RegisteredClient() ) { Id = "user-id" };
             var game = new Game( "game-name", "not-me" );
@@ -714,9 +685,6 @@ namespace Gemfire.Tests.Server.Hub
 
             #region GroupManager
             var groupManager = new Mock<IGroupManager>();
-
-            groupManager.Setup( a => a.Remove( It.IsAny<string>(), game.GroupName ) )
-                        .Callback( () => calledRemove = true );
             #endregion
 
             var hub = this.GetHub( connectionId,
@@ -726,7 +694,7 @@ namespace Gemfire.Tests.Server.Hub
            
             hub.LeaveGame( game.Id );
 
-            Assert.IsTrue( calledRemove );
+            groupManager.Verify( a => a.Remove( It.IsAny<string>(), game.GroupName ) );
         }
 
 

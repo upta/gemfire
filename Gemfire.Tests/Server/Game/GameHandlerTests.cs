@@ -27,10 +27,7 @@ namespace Gemfire.Tests
         [TestMethod]
         public void AddGame_AddsToRepository()
         {
-            var saveCalled = false;
             var repository = new Mock<IRepository>();
-            repository.Setup( a => a.Save<Game>( It.IsAny<Game>() ) )
-                      .Callback( () => saveCalled = true );
 
             var handler = new GameHandler( repository.Object );
             var game = new Game( "test-game", "creator-id" )
@@ -40,7 +37,7 @@ namespace Gemfire.Tests
 
             handler.AddGame( game );
 
-            Assert.IsTrue( saveCalled );
+            repository.Verify( a => a.Save<Game>( It.IsAny<Game>() ) );
         }
 
 
@@ -72,10 +69,7 @@ namespace Gemfire.Tests
         [TestMethod]
         public void AddPlayer_SavesAfterAddingPlayer()
         {
-            var saveCalled = false;
             var repository = new Mock<IRepository>();
-            repository.Setup( a => a.Save<Game>( It.IsAny<Game>() ) )
-                      .Callback( () => saveCalled = true );
 
             var handler = new GameHandler( repository.Object );
             var userId = "test-user-id";
@@ -83,7 +77,7 @@ namespace Gemfire.Tests
 
             handler.AddPlayer( game, userId );
 
-            Assert.IsTrue( saveCalled );
+            repository.Verify( a => a.Save<Game>( It.IsAny<Game>() ) );
         }
 
 
@@ -196,10 +190,7 @@ namespace Gemfire.Tests
         [TestMethod]
         public void RemoveGame_RemovesFromRepository()
         {
-            var deleteCalled = false;
             var repository = new Mock<IRepository>();
-            repository.Setup( a => a.Delete<Game>( It.IsAny<string>() ) )
-                      .Callback( () => deleteCalled = true );
 
             var handler = new GameHandler( repository.Object );
             var game = new Game( "test-name", "creator" )
@@ -210,7 +201,7 @@ namespace Gemfire.Tests
             handler.AddGame( game );
             handler.RemoveGame( game.Id );
 
-            Assert.IsTrue( deleteCalled );
+            repository.Verify( a => a.Delete<Game>( It.IsAny<string>() ) );
         }
 
 
@@ -233,10 +224,7 @@ namespace Gemfire.Tests
         [TestMethod]
         public void RemovePlayer_SavesGameAfterRemove()
         {
-            var saveCalled = false;
             var repository = new Mock<IRepository>();
-            repository.Setup( a => a.Save<Game>( It.IsAny<Game>() ) )
-                      .Callback( () => saveCalled = true );
 
             var handler = new GameHandler( repository.Object );
             var userId = "test-user-id";
@@ -248,7 +236,7 @@ namespace Gemfire.Tests
             handler.AddPlayer( game, userId );
             handler.RemovePlayer( game, userId );
 
-            Assert.IsTrue( saveCalled );
+            repository.Verify( a => a.Save<Game>( It.IsAny<Game>() ) );
         }
     }
 }

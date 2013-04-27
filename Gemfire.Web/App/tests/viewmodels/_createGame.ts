@@ -1,6 +1,8 @@
 ﻿/// <reference path="../../../Scripts/typings/_references.test.d.ts" />
 
 import helper = module( "tests/helper" );
+import app = module( "durandal/app" );
+import hub = module( "hubs/lobby" );
 import unit = module( "viewmodels/createGame" );
 
 QUnit.module( "viewmodels/createGame",

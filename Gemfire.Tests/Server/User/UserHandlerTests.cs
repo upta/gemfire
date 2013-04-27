@@ -23,17 +23,14 @@ namespace Gemfire.Tests
         [TestMethod]
         public void AddUser_GetsSaved()
         {
-            bool saveCalled = false;
-            var mock = new Mock<IRepository>();
-            mock.Setup( a => a.Save<User>( It.IsAny<User>() ) )
-                .Callback( () => saveCalled = true );
+            var repository = new Mock<IRepository>();
 
-            var handler = new UserHandler( mock.Object );
+            var handler = new UserHandler( repository.Object );
             var user = new User( "test-conn", new RegisteredClient() );
 
             handler.AddUser( user );
 
-            Assert.IsTrue( saveCalled );
+            repository.Verify( a => a.Save<User>( It.IsAny<User>() ) );
         }
 
         [TestMethod]

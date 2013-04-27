@@ -53,15 +53,23 @@ app.on( hub.Triggers.leftGame, function ( gameId: string, userId: string )
     _game.userList.remove( _user );
 } );
 
-hub.getGames()
-.done( function ( result:ListedGame[] )
+var init = _.once( function ()
 {
-    _.each( result, function ( a:ListedGame )
+    hub.getGames()
+    .done( function ( result: ListedGame[] )
     {
-        a.userList = ko.observableArray( a.players );
-        _games.push( a );
+        _.each( result, function ( a: ListedGame )
+        {
+            a.userList = ko.observableArray( a.players );
+            _games.push( a );
+        } );
     } );
 } );
+
+export function activate()
+{
+    init();
+}
 
 export var filter = _filter;
 
@@ -77,25 +85,25 @@ export var filteredGames = ko.computed( function ()
     return result;
 } )
 
-export function canJoinGame( game: ListedGame )
+export function canJoinGame( game: ListedGame ) : bool
 {
-    return !_.find( game.userList(), function ( a: UserDto )
+    return !Boolean( _.find( game.userList(), function ( a: UserDto )
     {
-        return a.id == auth.user.userId;
-    } );
+        return a.id === auth.user.userId;
+    } ) );
 }
 
-export function canLeaveGame( game: ListedGame )
+export function canLeaveGame( game: ListedGame ) : bool
 {
-    return _.find( game.userList(), function ( a: UserDto )
+    return Boolean( _.find( game.userList(), function ( a: UserDto )
     {
-        return a.id == auth.user.userId && a.id != game.creator;
-    } );
+        return a.id === auth.user.userId && a.id !== game.creator;
+    } ) );
 }
 
-export function createdGame( game: ListedGame )
+export function createdGame( game: ListedGame ) : bool
 {
-    return game.creator == auth.user.userId;
+    return game.creator === auth.user.userId;
 }
 
 export function joinGame( game: ListedGame )

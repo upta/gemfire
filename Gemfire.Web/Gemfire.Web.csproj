@@ -219,6 +219,13 @@
       <DependentUpon>_createGame.ts</DependentUpon>
     </Content>
     <Content Include="App\tests\viewmodels\_createGame.ts" />
+    <Content Include="App\tests\viewmodels\_lobby.js">
+      <DependentUpon>_lobby.ts</DependentUpon>
+    </Content>
+    <Content Include="App\tests\viewmodels\_lobby.min.js">
+      <DependentUpon>_lobby.ts</DependentUpon>
+    </Content>
+    <Content Include="App\tests\viewmodels\_lobby.ts" />
     <Content Include="App\tests\_auth.js">
       <DependentUpon>_auth.ts</DependentUpon>
     </Content>
@@ -278,6 +285,9 @@
     </Content>
     <Content Include="App\tests\viewmodels\_createGame.js.map">
       <DependentUpon>_createGame.ts</DependentUpon>
+    </Content>
+    <Content Include="App\tests\viewmodels\_lobby.js.map">
+      <DependentUpon>_lobby.ts</DependentUpon>
     </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.base.config</DependentUpon>
@@ -348,7 +358,7 @@
     <Content Include="App\viewmodels\shell.min.js">
       <DependentUpon>shell.ts</DependentUpon>
     </Content>
-    <Content Include="App\views\create.html" />
+    <Content Include="App\views\createGame.html" />
     <Content Include="App\views\lobby.html" />
     <Content Include="App\views\shell.html" />
     <Content Include="CSS\Copy of lobby.css">

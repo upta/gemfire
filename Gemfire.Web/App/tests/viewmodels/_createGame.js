@@ -1,6 +1,8 @@
 define(["require", "exports", "tests/helper", "viewmodels/createGame"], function(require, exports, __helper__, __unit__) {
     var helper = __helper__;
 
+    
+    
     var unit = __unit__;
 
     QUnit.module("viewmodels/createGame", {

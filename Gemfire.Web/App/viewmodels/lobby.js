@@ -32,12 +32,18 @@ define(["require", "exports", "durandal/app", "auth", "hubs/lobby"], function(re
         });
         _game.userList.remove(_user);
     });
-    hub.getGames().done(function (result) {
-        _.each(result, function (a) {
-            a.userList = ko.observableArray(a.players);
-            _games.push(a);
+    var init = _.once(function () {
+        hub.getGames().done(function (result) {
+            _.each(result, function (a) {
+                a.userList = ko.observableArray(a.players);
+                _games.push(a);
+            });
         });
     });
+    function activate() {
+        init();
+    }
+    exports.activate = activate;
     exports.filter = _filter;
     exports.filteredGames = ko.computed(function () {
         var result = _games();
@@ -47,19 +53,19 @@ define(["require", "exports", "durandal/app", "auth", "hubs/lobby"], function(re
         return result;
     });
     function canJoinGame(game) {
-        return !_.find(game.userList(), function (a) {
-            return a.id == auth.user.userId;
-        });
+        return !Boolean(_.find(game.userList(), function (a) {
+            return a.id === auth.user.userId;
+        }));
     }
     exports.canJoinGame = canJoinGame;
     function canLeaveGame(game) {
-        return _.find(game.userList(), function (a) {
-            return a.id == auth.user.userId && a.id != game.creator;
-        });
+        return Boolean(_.find(game.userList(), function (a) {
+            return a.id === auth.user.userId && a.id !== game.creator;
+        }));
     }
     exports.canLeaveGame = canLeaveGame;
     function createdGame(game) {
-        return game.creator == auth.user.userId;
+        return game.creator === auth.user.userId;
     }
     exports.createdGame = createdGame;
     function joinGame(game) {
