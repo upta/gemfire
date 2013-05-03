@@ -91,7 +91,7 @@ namespace Gemfire.Tests
                 Id = "test-id"
             };
 
-            var game = handler.CreateGameFromScenario( user, "test-scenario", "test-name" );
+            var game = handler.CreateGameWithScenario( user, "test-scenario", "test-name" );
 
             Assert.IsTrue( game.Players.Any( a => a == user.Id ) );
         }

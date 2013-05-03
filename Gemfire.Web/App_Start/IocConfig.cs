@@ -22,7 +22,7 @@ namespace Gemfire
             {
                 kernel.Bind<IRepository>().ToConstant( new MongoRepository( ConfigurationManager.ConnectionStrings[ "Mongo" ].ConnectionString, "gemfire" ) );
             }
-            catch ( Exception ex ) // probably a bad connection string for the mongodb, just use an in-memory store to get running instead
+            catch ( Exception ex ) // probably a bad/missing connection string for the mongodb, just use an in-memory store to get running instead
             {
                 kernel.Bind<IRepository>().ToConstant( new MemoryRepository() );
             }
@@ -34,6 +34,7 @@ namespace Gemfire
             kernel.Bind<IRegistrationHandler>().ToConstant( new RegistrationHandler() );
             kernel.Bind<IUserHandler>().ToConstant( new UserHandler( repo ) );
             kernel.Bind<IMappingHandler>().ToConstant( new AutoMapMappingHandler( kernel.Get<IUserHandler>() ) );
+            kernel.Bind<IScenarioHandler>().ToConstant( new ScenarioHandler() );
 
             DependencyResolver.SetResolver( new NinjectMVCDependencyResolver( kernel ) );
             GlobalHost.DependencyResolver = new NinjectSignalRDependencyResolver( kernel );

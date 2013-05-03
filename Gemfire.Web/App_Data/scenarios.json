@@ -1,0 +1,279 @@
+﻿{
+    "Erin & Ander":
+    {
+        name: "Erin & Ander",
+        families:
+        [
+            {
+                name: "Blanche",
+                members:
+                [
+                    {
+				        name: "Erin",
+				        intelligence: 84,
+				        war: 89,
+				        charm: 78
+				    },
+				    {
+				        name: "Roland",
+				        intelligence: 76,
+				        war: 89,
+				        charm: 86
+				    },
+				    {
+				        name: "Karl",
+				        intelligence: 76,
+				        war: 57,
+				        charm: 77
+				    },
+				    {
+				        name: "Pender",
+				        intelligence: 74,
+				        war: 89,
+				        charm: 31
+				    },
+				    {
+				        name: "Anslem",
+				        intelligence: 76,
+				        war: 52,
+				        charm: 75
+				    }
+                ]
+            },
+            {
+                name: "Lankshire",
+                members:
+                [
+                    {
+				        name: "Eselred",
+				        intelligence: 41,
+				        war: 37,
+				        charm: 60
+				    },
+                    {
+				        name: "Loryn",
+				        intelligence: 77,
+				        war: 89,
+				        charm: 75
+				    },
+                    {
+				        name: "Terian",
+				        intelligence: 78,
+				        war: 81,
+				        charm: 77
+				    },
+                    {
+				        name: "Regis",
+				        intelligence: 80,
+				        war: 70,
+				        charm: 75
+				    },
+                    {
+				        name: "Adryl",
+				        intelligence: 71,
+				        war: 83,
+				        charm: 46
+				    },
+                    {
+				        name: "Carlyle",
+				        intelligence: 67,
+				        war: 73,
+				        charm: 71
+				    },
+                    {
+				        name: "Colin",
+				        intelligence: 86,
+				        war: 74,
+				        charm: 89
+				    },
+                    {
+				        name: "Shabard",
+				        intelligence: 51,
+				        war: 74,
+				        charm: 57
+				    },
+                    {
+				        name: "Geolug",
+				        intelligence: 98,
+				        war: 89,
+				        charm: 68
+				    },
+                    {
+				        name: "Oswald",
+				        intelligence: 73,
+				        war: 82,
+				        charm: 68
+				    },
+                    {
+				        name: "Karla",
+				        intelligence: 66,
+				        war: 43,
+				        charm: 82
+				    },
+                    {
+				        name: "Griff",
+				        intelligence: 69,
+				        war: 84,
+				        charm: 76
+				    },
+                    {
+				        name: "Aiden",
+				        intelligence: 52,
+				        war: 71,
+				        charm: 41
+				    },
+                    {
+				        name: "Lenne",
+				        intelligence: 48,
+				        war: 57,
+				        charm: 56
+				    },
+                    {
+				        name: "Nicolay",
+				        intelligence: 46,
+				        war: 51,
+				        charm: 57
+				    },
+                    {
+				        name: "Francis",
+				        intelligence: 37,
+				        war: 48,
+				        charm: 55
+				    }
+                ]
+            },
+            {
+                name: "Lyle",
+                members:
+                [
+                    {
+				        name: "Ander",
+				        intelligence: 90,
+				        war: 87,
+				        charm: 76
+				    },
+                    {
+				        name: "Seth",
+				        intelligence: 87,
+				        war: 78,
+				        charm: 71
+				    },
+                    {
+				        name: "Wolfen",
+				        intelligence: 63,
+				        war: 91,
+				        charm: 62
+				    },
+                    {
+				        name: "Anslem",
+				        intelligence: 41,
+				        war: 56,
+				        charm: 37
+				    }
+                ]
+            },
+            {
+                name: "Chrysalis"
+                members:
+                [
+                    {
+				        name: "Garth",
+				        intelligence: 54,
+				        war: 69,
+				        charm: 60
+				    },
+                    {
+				        name: "Elgis",
+				        intelligence: 56,
+				        war: 93,
+				        charm: 35
+				    },
+                    {
+				        name: "Sarthe",
+				        intelligence: 48,
+				        war: 39,
+				        charm: 62
+				    }
+                ]
+            },
+            {
+                name: "Molbrew",
+                members:
+                [
+                    {
+				        name: "Leander",
+				        intelligence: 65,
+				        war: 60,
+				        charm: 67
+				    },
+                    {
+				        name: "Fuster",
+				        intelligence: 54,
+				        war: 73,
+				        charm: 56
+				    },
+                    {
+				        name: "Aigle",
+				        intelligence: 50,
+				        war: 55,
+				        charm: 55
+				    },
+                ]
+            },
+            {
+                name: "Flax",
+                members:
+                [
+                    {
+				        name: "Erik",
+				        intelligence: 82,
+				        war: 76,
+				        charm: 72
+				    },
+                    {
+				        name: "Jerras",
+				        intelligence: 67,
+				        war: 45,
+				        charm: 71
+				    },
+                    {
+				        name: "Esok",
+				        intelligence: 51,
+				        war: 64,
+				        charm: 55
+				    }
+                ]
+            }
+            {
+                name: "Coryll",
+                members:
+                [
+                    {
+				        name: "Lars",
+				        intelligence: 80,
+				        war: 74,
+				        charm: 71
+				    },
+                    {
+				        name: "Erven",
+				        intelligence: 59,
+				        war: 66,
+				        charm: 79
+				    },
+                    {
+				        name: "Eustace",
+				        intelligence: 62,
+				        war: 57,
+				        charm: 53
+				    }
+                ]
+            }
+        ],
+        provinces:
+        [
+            {
+                name:
+            }
+        ]
+    }
+}

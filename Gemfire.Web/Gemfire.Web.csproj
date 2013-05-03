@@ -156,7 +156,13 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Server\Authentication\ILoginHandler.cs" />
+    <Compile Include="Server\Dto\InitDto.cs" />
+    <Compile Include="Server\Scenario\IScenarioHandler.cs" />
+    <Compile Include="Server\Game\Models\Character.cs" />
+    <Compile Include="Server\Game\Models\Family.cs" />
+    <Compile Include="Server\Game\Models\GameState.cs" />
     <Compile Include="Server\Game\IGameHandler.cs" />
+    <Compile Include="Server\Game\Models\Province.cs" />
     <Compile Include="Server\Game\Player.cs" />
     <Compile Include="Server\Mapping\AutoMapMappingHandler.cs" />
     <Compile Include="Server\Mapping\IMappingHandler.cs" />
@@ -176,6 +182,7 @@
     <Compile Include="Server\Repository\IRepository.cs" />
     <Compile Include="Server\Repository\MemoryRepository.cs" />
     <Compile Include="Server\Repository\MongoRepository.cs" />
+    <Compile Include="Server\Scenario\ScenarioHandler.cs" />
     <Compile Include="Server\User\IUserHandler.cs" />
     <Compile Include="Server\User\User.cs" />
     <Compile Include="Server\User\UserHandler.cs" />
@@ -289,6 +296,7 @@
     <Content Include="App\tests\viewmodels\_lobby.js.map">
       <DependentUpon>_lobby.ts</DependentUpon>
     </Content>
+    <Content Include="App_Data\scenarios.json" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.base.config</DependentUpon>
     </None>
@@ -479,9 +487,7 @@
     <Content Include="Views\Web.config" />
     <Content Include="Scripts\jquery-1.9.1.min.map" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>

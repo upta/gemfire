@@ -16,29 +16,38 @@ namespace Gemfire
         private readonly IRegistrationHandler registrationHandler;
         private readonly IUserHandler userHandler;
         private readonly IMappingHandler mappingHandler;
+        private readonly IScenarioHandler scenarioHandler;
 
         private object locker = new object();
 
         public Lobby( IGameHandler gameHandler,
                       IRegistrationHandler registrationHandler,
                       IUserHandler userHandler,
-                      IMappingHandler mappingHandler )
+                      IMappingHandler mappingHandler,
+                      IScenarioHandler scenarioHandler )
         {
             this.gameHandler = gameHandler;
             this.registrationHandler = registrationHandler;
             this.userHandler = userHandler;
             this.mappingHandler = mappingHandler;
+            this.scenarioHandler = scenarioHandler;
         }
 
 
         public void CreateGame( string name, string scenario )
         {
             var user = this.GetCurrentUser();
-            var game = this.gameHandler.CreateGameFromScenario( user, scenario, name );
+
+            if ( !this.scenarioHandler.ValidScenario( scenario ) )
+            {
+                throw new InvalidOperationException( string.Format( "Scenario '{0}' wasn't found", scenario ) );
+            }
+
+            var game = this.gameHandler.CreateGameWithScenario( user, scenario, name );
 
             if ( game == null )
             {
-                throw new InvalidOperationException( string.Format( "Failed to create game from scenario {0}, named {1}", scenario, name ) );
+                throw new InvalidOperationException( string.Format( "Failed to create game from scenario '{0}', named '{1}'", scenario, name ) );
             }
 
             this.gameHandler.AddGame( game );
@@ -48,7 +57,7 @@ namespace Gemfire
             this.Clients.All.gameCreated( dto );
         }
 
-        public object InitializeClient( string registrationId )
+        public InitDto InitializeClient( string registrationId )
         {
             if ( this.registrationHandler.RegistrationExists( registrationId ) )
             {
@@ -81,9 +90,10 @@ namespace Gemfire
                     this.Groups.Add( user.ConnectionId, game.GroupName );
                 }
 
-                return new
+                return new InitDto
                 {
-                    userId = user.Id
+                    Scenarios = this.scenarioHandler.GetScenarioNames(),
+                    UserId = user.Id
                 };
             }
 

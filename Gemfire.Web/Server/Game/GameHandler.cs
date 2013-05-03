@@ -33,9 +33,9 @@ namespace Gemfire
             }
         }
 
-        public Game CreateGameFromScenario( User creator, string scenario, string name )
+        public Game CreateGameWithScenario( User creator, string scenario, string name )
         {
-            var game = new Game( name, creator.Id );  // deserialize the default json for the given scenario
+            var game = new Game( name, creator.Id );
             game.Scenario = scenario;
 
             this.AddPlayer( game, creator.Id );

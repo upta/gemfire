@@ -8,7 +8,7 @@ using Moq;
 using System.Dynamic;
 using System.Threading.Tasks;
 
-namespace Gemfire.Tests.Server.Hub
+namespace Gemfire.Tests
 {
     [TestClass]
     public class LobbyTests
@@ -19,6 +19,26 @@ namespace Gemfire.Tests.Server.Hub
             var connectionId = "123";
 
             var hub = this.GetHub( connectionId );
+
+            AssertIt.Throws<InvalidOperationException>( () =>
+            {
+                hub.CreateGame( "game-name", "scenario" );
+            } );
+        }
+
+        [TestMethod]
+        public void CreateGame_ThrowsIfScenarioDoesntExist()
+        {
+            var connectionId = "123";
+
+            #region UserHandler
+            var userHandler = new Mock<IUserHandler>();
+
+            userHandler.Setup( a => a.GetUser( connectionId ) )
+                       .Returns( new User( connectionId, new RegisteredClient() ) );
+            #endregion
+
+            var hub = this.GetHub( connectionId, userHandler: userHandler );
 
             AssertIt.Throws<InvalidOperationException>( () =>
             {
@@ -38,7 +58,16 @@ namespace Gemfire.Tests.Server.Hub
                        .Returns( new User( connectionId, new RegisteredClient() ) );
             #endregion
 
-            var hub = this.GetHub( connectionId, userHandler: userHandler );
+            #region ScenarioHandler
+            var scenarioHandler = new Mock<IScenarioHandler>();
+
+            scenarioHandler.Setup( a => a.ValidScenario( It.IsAny<string>() ) )
+                           .Returns( true );
+            #endregion
+
+            var hub = this.GetHub( connectionId,
+                                   userHandler: userHandler,
+                                   scenarioHandler: scenarioHandler );
 
             AssertIt.Throws<InvalidOperationException>( () =>
             {
@@ -65,13 +94,21 @@ namespace Gemfire.Tests.Server.Hub
             #region GameHandler
             var gameHandler = new Mock<IGameHandler>();
 
-            gameHandler.Setup( a => a.CreateGameFromScenario( It.IsAny<User>(), It.IsAny<string>(), It.IsAny<string>() ) )
+            gameHandler.Setup( a => a.CreateGameWithScenario( It.IsAny<User>(), It.IsAny<string>(), It.IsAny<string>() ) )
                        .Returns( game );
+            #endregion
+
+            #region ScenarioHandler
+            var scenarioHandler = new Mock<IScenarioHandler>();
+
+            scenarioHandler.Setup( a => a.ValidScenario( scenario ) )
+                           .Returns( true );
             #endregion
 
             var hub = this.GetHub( connectionId,
                                    userHandler: userHandler,
-                                   gameHandler: gameHandler );
+                                   gameHandler: gameHandler,
+                                   scenarioHandler: scenarioHandler );
 
             hub.CreateGame( gameName, scenario );
 
@@ -98,8 +135,15 @@ namespace Gemfire.Tests.Server.Hub
             #region GameHandler
             var gameHandler = new Mock<IGameHandler>();
 
-            gameHandler.Setup( a => a.CreateGameFromScenario( It.IsAny<User>(), It.IsAny<string>(), It.IsAny<string>() ) )
+            gameHandler.Setup( a => a.CreateGameWithScenario( It.IsAny<User>(), It.IsAny<string>(), It.IsAny<string>() ) )
                        .Returns( game );
+            #endregion
+
+            #region ScenarioHandler
+            var scenarioHandler = new Mock<IScenarioHandler>();
+
+            scenarioHandler.Setup( a => a.ValidScenario( scenario ) )
+                           .Returns( true );
             #endregion
 
             #region GroupManager
@@ -112,7 +156,8 @@ namespace Gemfire.Tests.Server.Hub
             var hub = this.GetHub( connectionId,
                                    userHandler: userHandler,
                                    gameHandler: gameHandler,
-                                   groupManager: groupManager );
+                                   groupManager: groupManager,
+                                   scenarioHandler: scenarioHandler );
 
             hub.CreateGame( gameName, scenario );
 
@@ -139,13 +184,21 @@ namespace Gemfire.Tests.Server.Hub
             #region GameHandler
             var gameHandler = new Mock<IGameHandler>();
 
-            gameHandler.Setup( a => a.CreateGameFromScenario( It.IsAny<User>(), It.IsAny<string>(), It.IsAny<string>() ) )
+            gameHandler.Setup( a => a.CreateGameWithScenario( It.IsAny<User>(), It.IsAny<string>(), It.IsAny<string>() ) )
                        .Returns( game );
+            #endregion
+
+            #region ScenarioHandler
+            var scenarioHandler = new Mock<IScenarioHandler>();
+
+            scenarioHandler.Setup( a => a.ValidScenario( scenario ) )
+                           .Returns( true );
             #endregion
 
             var hub = this.GetHub( connectionId,
                                    userHandler: userHandler,
-                                   gameHandler: gameHandler );
+                                   gameHandler: gameHandler,
+                                   scenarioHandler: scenarioHandler );
 
             dynamic all = new ExpandoObject();
             all.gameCreated = new Action<GameDto>( ( dto ) =>
@@ -366,6 +419,73 @@ namespace Gemfire.Tests.Server.Hub
             var result = hub.InitializeClient( "reg" );
 
             Assert.IsTrue( addedGroups.Any( a => a == userGame.GroupName ) );
+        }
+
+        [TestMethod]
+        public void InitializeClient_ReturnsAvailableScenarios()
+        {
+            var connection = "123";
+            var userid = "user-id";
+
+            var rc = new RegisteredClient
+            {
+                DisplayName = "name",
+                Identity = "id",
+                Photo = "photo",
+                RegistrationId = "reg-id"
+            };
+
+            var userGame = new Game( "name", "creator" )
+            {
+                Id = "game-id",
+                Players = new List<string>() { userid }
+            };
+
+            var scenarioNames = new List<string>() { "s1", "s2" };
+
+            #region RegistrationHandler
+            var registration = new Mock<IRegistrationHandler>();
+
+            registration.Setup( a => a.RegistrationExists( It.IsAny<string>() ) )
+                        .Returns( true );
+
+            registration.Setup( a => a.RemoveRegistration( It.IsAny<string>() ) )
+                        .Returns( rc );
+            #endregion
+
+            #region UserHandler
+            var user = new Mock<IUserHandler>();
+
+            user.Setup( a => a.UserExists( It.IsAny<string>() ) )
+                .Returns( false );
+
+            user.Setup( a => a.FindUserByIdentity( It.IsAny<string>() ) )
+                .Returns( new User( connection, rc ) { Id = userid } );
+            #endregion
+
+            #region GameHandler
+            var game = new Mock<IGameHandler>();
+
+            game.Setup( a => a.GetGames() )
+                .Returns( new List<Game>() { userGame } );
+            #endregion
+
+            #region ScenarioHandler
+            var scenarioHandler = new Mock<IScenarioHandler>();
+
+            scenarioHandler.Setup( a => a.GetScenarioNames() )
+                           .Returns( scenarioNames );
+            #endregion
+
+            var hub = this.GetHub( connection,
+                                   registrationHandler: registration,
+                                   userHandler: user,
+                                   gameHandler: game,
+                                   scenarioHandler: scenarioHandler );
+
+            var result = hub.InitializeClient( "reg" );
+
+            CollectionAssert.AreEquivalent( scenarioNames, result.Scenarios.ToList() );
         }
 
 
@@ -705,7 +825,8 @@ namespace Gemfire.Tests.Server.Hub
                                       Mock<IGameHandler> gameHandler = null,
                                       Mock<IRegistrationHandler> registrationHandler = null,
                                       Mock<IUserHandler> userHandler = null,
-                                      Mock<IMappingHandler> mappingHandler = null )
+                                      Mock<IMappingHandler> mappingHandler = null,
+                                      Mock<IScenarioHandler> scenarioHandler = null )
         {
             clientState = clientState ?? new StateChangeTracker();
             cookies = cookies ?? new Dictionary<string, Cookie>();
@@ -713,7 +834,8 @@ namespace Gemfire.Tests.Server.Hub
             var lobby = new TestableLobby( gameHandler ?? new Mock<IGameHandler>(),
                                            registrationHandler ?? new Mock<IRegistrationHandler>(),
                                            userHandler ?? new Mock<IUserHandler>(),
-                                           mappingHandler ?? new Mock<IMappingHandler>() );
+                                           mappingHandler ?? new Mock<IMappingHandler>(),
+                                           scenarioHandler ?? new Mock<IScenarioHandler>() );
 
             lobby.Clients = new HubConnectionContext( new Mock<IHubPipelineInvoker>().Object,
                                                       new Mock<IConnection>().Object,
@@ -736,11 +858,13 @@ namespace Gemfire.Tests.Server.Hub
         public TestableLobby( Mock<IGameHandler> gameHandler,
                               Mock<IRegistrationHandler> registrationHandler,
                               Mock<IUserHandler> userHandler,
-                              Mock<IMappingHandler> mappingHandler )
+                              Mock<IMappingHandler> mappingHandler,
+                              Mock<IScenarioHandler> scenarioHandler )
             : base( gameHandler.Object, 
                     registrationHandler.Object, 
                     userHandler.Object, 
-                    mappingHandler.Object )
+                    mappingHandler.Object,
+                    scenarioHandler.Object )
         {
         }
     }
